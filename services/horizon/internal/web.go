@@ -272,7 +272,7 @@ func (w *web) mustInstallActions(config Config, pathFinder paths.Finder, session
 			OnlyPayments:                false,
 		}, streamHandler))
 		r.Get("/{id}", OperationShowAction{}.Handle)
-		r.Method(http.MethodGet, "/{op_id}/effects", streamableHistoryPageHandler(actions.GetEffectsHandler{}, streamHandler))
+		r.With(historyMiddleware).Method(http.MethodGet, "/{op_id}/effects", streamableHistoryPageHandler(actions.GetEffectsHandler{}, streamHandler))
 
 	})
 
@@ -284,7 +284,7 @@ func (w *web) mustInstallActions(config Config, pathFinder paths.Finder, session
 		}, streamHandler))
 
 		// effect actions
-		r.Method(http.MethodGet, "/effects", streamableHistoryPageHandler(actions.GetEffectsHandler{}, streamHandler))
+		r.With(historyMiddleware).Method(http.MethodGet, "/effects", streamableHistoryPageHandler(actions.GetEffectsHandler{}, streamHandler))
 
 		// trading related endpoints
 		r.Get("/trades", TradeIndexAction{}.Handle)
